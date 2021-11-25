@@ -18,6 +18,9 @@ RUN ln -s /etc/sv/* /etc/service
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x entrypoint.sh
 
+VOLUME /var/spool/rtpproxy
+VOLUME /var/lib/rtpproxy-recording
+
 EXPOSE 7890/udp
 
 ENTRYPOINT ["/entrypoint.sh"]
