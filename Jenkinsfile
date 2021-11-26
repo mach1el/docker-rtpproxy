@@ -1,50 +1,54 @@
 pipeline{
 
-	agent any
-	
-	triggers {
+  agent {label 'linux'}
+  
+  triggers {
     pollSCM('*/2 * * * *')
-	}
+  }
 
-	environment {
-		dockerhubCred = 'dockerhub'
-	}
+  stages {
+      
+      stage('gitclone') {
 
-	stages {
-	    
-	    stage('gitclone') {
+      steps {
+        git 'https://github.com/mach1el/docker-rtpproxy.git'
+      }
+    }
 
-			steps {
-				git 'https://github.com/mach1el/docker-rtpproxy.git'
-			}
-		}
+    stage('Build') {
 
-		stage('Build') {
+      steps {
+        sh 'docker build -t mich43l/rtpproxy:latest .'
+      }
+    }
 
-			steps {
-				sh 'docker build -t mich43l/rtpproxy:latest .'
-			}
-		}
+    stage('Login') {
+      steps {
+        withCredentials([
+          usernamePassword(
+            credentialsId: 'dockerhub', 
+            usernameVariable: 'USER', 
+            passwordVariable: 'PASS'
+            )]) {
+          sh '''
+          docker login -u ${USER} -p ${PASS}
+          '''
+        }
+      }
+    }
 
-		stage('Login') {
+    stage('Push') {
 
-			steps {
-				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-			}
-		}
+      steps {
+        sh 'docker push mich43l/rtpproxy:latest'
+      }
+    }
+  }
 
-		stage('Push') {
-
-			steps {
-				sh 'docker push mich43l/rtpproxy:latest'
-			}
-		}
-	}
-
-	post {
-		always {
-			sh 'docker logout'
-		}
-	}
+  post {
+    always {
+      sh 'docker logout'
+    }
+  }
 
 }
