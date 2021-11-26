@@ -43,7 +43,6 @@ pipeline{
         sh 'docker push mich43l/rtpproxy:latest'
       }
     }
-  }
 
     stage('Clean') {
 
