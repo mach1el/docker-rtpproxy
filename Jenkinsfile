@@ -45,6 +45,14 @@ pipeline{
     }
   }
 
+    stage('Clean') {
+
+      steps {
+        sh 'docker rmi mich43l/rtpproxy:latest'
+      }
+    }
+  }
+
   post {
     always {
       sh 'docker logout'
