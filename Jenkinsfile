@@ -3,12 +3,11 @@ pipeline{
 	agent any
 	
 	triggers {
-        // poll repo every 2 minute for changes
-        pollSCM('*/2 * * * *')
+    pollSCM('*/2 * * * *')
 	}
 
 	environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+		dockerhubCred = 'dockerhub'
 	}
 
 	stages {
