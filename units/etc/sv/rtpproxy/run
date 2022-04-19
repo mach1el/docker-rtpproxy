@@ -1,4 +1,4 @@
 #!/bin/bash
 set -m
 
-exec /usr/bin/rtpproxy -l 0.0.0.0 -s udp:0.0.0.0:7890 -RFf -L 500000 -m 10000 -M 65000 -d INFO:LOG_LOCAL5 -r /var/lib/rtpproxy-recording -S /var/spool/rtpproxy
+exec /usr/bin/rtpproxy -l 0.0.0.0 -s udp:*:7890 -RFf -L 500000 -m 10000 -M 65000 -d INFO:LOG_LOCAL5 -r /var/lib/rtpproxy-recording -S /var/spool/rtpproxy
